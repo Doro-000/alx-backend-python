@@ -14,4 +14,8 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     """
         implementation
     """
-    return await asyncio.gather(*(wait_random(max_delay) for _ in range(n)))
+    result: List[float] = []
+    for wait_r_spawn in asyncio.as_completed(
+            [wait_random(max_delay) for _ in range(n)]):
+        result.append(await wait_r_spawn)
+    return result
